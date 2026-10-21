@@ -58,7 +58,7 @@
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --bordeaux: #6b1d2e; --bordeaux-dark: #4a1320; --vine: #4a5d3a;
+  --bordeaux: #6b1d2e; --bordeaux-dark: #4a1320; --vine: #4a5d3a; --vine-fill: #4a5d3a;
   --cream: #faf6f0; --sand: #ebe4d6; --ink: #2a2420; --muted: #6b6258;
   --border: #d4cabb; --warn: #87531c; --danger: #a8342f; --ok: #376647;
   /* Surfaces & accents (servent au thème clair/sombre) */
@@ -1351,12 +1351,12 @@ tr.drag-over-bottom td { box-shadow: inset 0 -3px 0 var(--bordeaux); }
 .parcelle-list-mini .item { padding: 8px 12px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
 .parcelle-list-mini .item:last-child { border-bottom: none; }
 .parcelle-list-mini .item .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
-.parcelle-list-mini .item .status-dot.placed { background: var(--vine); }
+.parcelle-list-mini .item .status-dot.placed { background: var(--vine-fill); }
 .parcelle-list-mini .item .status-dot.unplaced { background: var(--border); }
 .parcelle-list-mini .item button { background: var(--bordeaux); color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-family: inherit; }
-.parcelle-list-mini .item button.placed-btn { background: var(--vine); }
+.parcelle-list-mini .item button.placed-btn { background: var(--vine-fill); color: white; }
 /* ===== CARTE MODERNISÉE (marqueur épingle SVG) ===== */
-.vigne-marker { position: relative; width: 30px; height: 38px; color: var(--accent); cursor: pointer; filter: drop-shadow(0 3px 4px rgba(0,0,0,0.35)); transition: transform .15s ease; }
+.vigne-marker { position: relative; width: 30px; height: 38px; color: var(--bordeaux); cursor: pointer; filter: drop-shadow(0 3px 4px rgba(0,0,0,0.35)); transition: transform .15s ease; }
 .vigne-marker:hover { transform: scale(1.1); }
 .vigne-marker svg { display: block; }
 .vigne-marker.dre { color: var(--warn); animation: pulse 1.6s infinite; }
@@ -1725,28 +1725,29 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   outline: 2px solid var(--accent); outline-offset: 3px;
 }
 .auth-card { background: var(--surface-2); border: 1px solid var(--border); }
+/* L'accueil conserve son panneau clair et les couleurs de la marque dans les deux modes. */
+#auth-screen {
+  color-scheme: light;
+  --cream: #faf6f0; --sand: #ebe4d6; --ink: #2a2420; --muted: #6b6258;
+  --border: #d4cabb; --surface: #fff; --surface-2: #fbf8f3;
+  --accent: #6b1d2e; --accent-heading: #6b1d2e; --accent-soft: #f3e8ed;
+  --warn: #87531c; --danger: #a8342f; --ok: #376647;
+  --ok-soft: #e3f0e6; --warn-soft: #fff2dd; --danger-soft: #fbe9e8;
+  color: var(--ink);
+}
 .auth-form-row input:focus, .auth-form-row-grid input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
 .loading-overlay { background: var(--cream); }
 .sidebar-collapsed .sidebar-link::after { background: var(--surface); color: var(--ink); border: 1px solid var(--border); }
-.save-toast, .parcelle-list-mini .item button.placed-btn, #view-wiki .cep-chip.on { color: var(--on-vine); }
+.save-toast, #view-wiki .cep-chip.on { color: var(--on-vine); }
 .tache-urgent, #pc-gps-btn.recording, .cepage-del:hover, #view-wiki .seltag .x:hover { color: var(--on-danger); }
 #pc-repere-btn.active, .repere-num { color: var(--on-accent); }
 .sidebar-badge { color: #2a2420; }
 .alert-banner { color: var(--ink); }
 :root[data-theme="dark"] .role-badge.admin { background: #382e43; color: #d7b8ed; }
 
-/* Rappels et fiches : surfaces teintées, texte lisible, sans grandes plages blanches. */
-:root[data-theme="dark"] .rap-card { background: var(--warn-soft); border-color: var(--border); border-top-color: var(--warn); }
-:root[data-theme="dark"] .rap-card.haute, :root[data-theme="dark"] .rap-card.retard { background: var(--danger-soft); border-top-color: var(--danger); }
-:root[data-theme="dark"] .rap-card.basse { background: var(--ok-soft); border-top-color: var(--ok); }
-:root[data-theme="dark"] .rap-texte, :root[data-theme="dark"] .rap-delete { color: var(--ink); }
-:root[data-theme="dark"] .rap-parcelle, :root[data-theme="dark"] .rap-date { color: var(--muted); }
-:root[data-theme="dark"] .rap-echeance { border-color: var(--border); }
-:root[data-theme="dark"] .rap-card.fait { background: var(--surface-2) !important; opacity: 1; }
-:root[data-theme="dark"] .rap-card.fait .rap-texte { color: var(--muted); }
-.rap-badge.moyenne { background: var(--warn-soft); color: var(--warn); }
-:root[data-theme="dark"] .rap-badge.basse { background: var(--surface); color: var(--ok); }
-:root[data-theme="dark"] .rap-badge.ok { background: var(--surface); color: var(--muted); }
+/* Les cartes de rappel gardent leur papier clair et leur encre foncée dans les deux modes. */
+.rap-badge.moyenne { background: #fff2dd; color: #87531c; }
+/* Les fiches Wiki suivent les surfaces du thème. */
 :root[data-theme="dark"] #view-wiki .perso { background: var(--accent-soft); border-color: var(--border); }
 :root[data-theme="dark"] #view-wiki .perso .pt,
 :root[data-theme="dark"] #view-wiki .perso .adapt,
