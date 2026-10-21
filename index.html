@@ -71,11 +71,11 @@
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --bordeaux: #81344b; --bordeaux-dark: #68283c; --vine: #a2bf96;
+  --bordeaux: #6b1d2e; --bordeaux-dark: #4a1320; --vine: #a2bf96;
   --cream: #171b20; --sand: #29313a; --ink: #eeeae5; --muted: #b5b9c0;
   --border: #424d59; --warn: #e6bc7b; --danger: #f09b96; --ok: #a2c7ab;
   --surface: #20262d; --surface-2: #282f38; --shadow: rgba(0,0,0,0.24);
-  --on-brand: #faf6f0; --accent: #edb0c0;
+  --on-brand: #faf6f0; --accent: #e17b83; --accent-heading: #c75b65;
   --ok-soft: #263a31; --warn-soft: #3b3327; --danger-soft: #402c31; --accent-soft: #3c2c37;
   --on-vine: #17231a; --on-danger: #28191b; --on-accent: #291a20;
 }
@@ -1709,6 +1709,15 @@ body.wk-lock { overflow:hidden; }
 @media(max-width:560px){ #view-wiki .wk-two { grid-template-columns:1fr; } }
 
 /* ===== Composants communs aux deux thèmes ===== */
+/* En sombre, les grands titres peuvent porter un rouge plus profond que les petits liens. */
+:root[data-theme="dark"] .page-title,
+:root[data-theme="dark"] .section-title,
+:root[data-theme="dark"] .rappels-title,
+:root[data-theme="dark"] .stat .value,
+:root[data-theme="dark"] .auth-title,
+:root[data-theme="dark"] .auth-logo h1 { color: var(--accent-heading); }
+:root[data-theme="dark"] .section-title,
+:root[data-theme="dark"] .rappels-title { font-weight: 700; }
 .rap-add { color: var(--warn); }
 #view-wiki .wcard .cat-tag { color: color-mix(in srgb, var(--waccent) 85%, black); }
 button, input, select, textarea { accent-color: var(--accent); }
