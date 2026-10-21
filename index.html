@@ -2177,7 +2177,7 @@ body.wk-lock { overflow:hidden; }
           <select id="filter-year" onchange="renderTraitements()"><option value="">Toutes les années</option></select>
           <button class="btn btn-primary" onclick="openTraitementModal()">+ Nouveau traitement</button>
         </div>
-        <table><thead><tr><th>Date</th><th>Produit</th><th class="hide-mobile">Cible</th><th>Parcelles</th><th class="hide-mobile">Dose</th><th class="hide-mobile">DRE</th><th></th></tr></thead><tbody id="list-traitements"></tbody></table>
+        <table><thead><tr><th>Date</th><th>Produit</th><th class="hide-mobile">Cible</th><th>Parcelles</th><th class="hide-mobile">Quantité</th><th class="hide-mobile">DRE</th><th></th></tr></thead><tbody id="list-traitements"></tbody></table>
       </div>
     </section>
 
@@ -4010,18 +4010,20 @@ async function importPreparation(prepId) {
 
   const pps = cache.preparation_produits.filter(pp => pp.preparation_id === prepId).sort((a,b) => (a.ordre||0)-(b.ordre||0));
   const pparcs = cache.preparation_parcelles.filter(pp => pp.preparation_id === prepId);
+  const prep = cache.preparations.find(p => p.id === prepId);
+  if (!prep || !pps.length || pps.some(pp => pp.quantite_calculee == null ||
+      !Number.isFinite(Number(pp.quantite_calculee)) || Number(pp.quantite_calculee) <= 0 ||
+      !['L', 'mL', 'kg', 'g'].includes(pp.unite_quantite) || !getProduit(pp.produit_id))) {
+    throw new Error('Cette préparation doit être recalculée : une quantité totale ou un produit est manquant.');
+  }
   
   // Cocher les produits avec leurs doses calculées
   pps.forEach(pp => {
     const cb = document.querySelector(`input[data-prod-id="${pp.produit_id}"]`);
     if (cb) {
       if (!cb.checked) { cb.checked = true; onProduitToggle(pp.produit_id); }
-      let doseTraitement = pp.dose;
-      let uniteTraitement = pp.unite.split('/')[0];
-      if (pp.quantite_calculee && pp.unite_quantite) {
-        doseTraitement = pp.quantite_calculee;
-        uniteTraitement = pp.unite_quantite;
-      }
+      const doseTraitement = Number(pp.quantite_calculee);
+      const uniteTraitement = pp.unite_quantite;
       const doseInput = document.getElementById(`tp-dose-${pp.produit_id}`);
       const uniteSelect = document.getElementById(`tp-unit-${pp.produit_id}`);
       if (doseInput) doseInput.value = parseFloat(doseTraitement.toFixed(3));
@@ -4049,7 +4051,6 @@ async function importPreparation(prepId) {
   if (typeof updateSurfaceTotale === 'function') updateSurfaceTotale();
   
   // Pré-remplir le volume d'eau dans le formulaire traitement
-  const prep = cache.preparations.find(p => p.id === prepId);
   if (prep && prep.volume_total_calcule) {
     // Calculer le volume d'eau (volume total - produits liquides)
     let volumeProduitsLiquides = 0;
@@ -4064,9 +4065,8 @@ async function importPreparation(prepId) {
     if (volumeEauInput) volumeEauInput.value = volumeEau.toFixed(1);
   }
   
-  // Marquer comme utilisée
-  await ovCheckedMutation(sb.from('preparations').update({ utilisee: true }).eq('id', prepId).select('id'), true);
-  if (prep) prep.utilisee = true;
+  // L'import ne sauvegarde rien. Le statut changera après l'enregistrement du traitement.
+  document.getElementById('modal-traitement').dataset.preparationId = prepId;
   closeModal('modal-import-prep');
   toast('📋 Préparation importée');
 
@@ -7079,6 +7079,7 @@ function openTraitementModal(tid) {
   // Vérification des droits
   if (!tid && !peut('traitements_creer')) { alert('Vous n\'avez pas le droit de créer un traitement.'); return; }
   if (tid && !peut('traitements_voir')) { alert('Vous n\'avez pas le droit de voir les traitements.'); return; }
+  delete document.getElementById('modal-traitement').dataset.preparationId;
   const isEdit = !!tid;
   document.getElementById('modal-traitement-title').textContent = isEdit ? 'Modifier le traitement' : 'Nouveau traitement';
   document.getElementById('t-id').value = tid||'';
@@ -7102,7 +7103,7 @@ function openTraitementModal(tid) {
           </label>
         </div>
         <div class="tp-fields" id="tp-fields-${p.id}">
-          <label>Dose :</label>
+          <label>Quantité totale utilisée :</label>
           <input type="number" step="0.001" class="tp-dose-input" id="tp-dose-${p.id}" placeholder="0">
           <select class="tp-unit-select" id="tp-unit-${p.id}">
             <option value="L"${p.unite_defaut==='L'?' selected':''}>L</option>
@@ -7274,7 +7275,57 @@ function updateSurfaceTotale() {
   document.getElementById('t-surface-totale').textContent = `Surface totale traitée : ${total.toLocaleString('fr-FR')} m² (${ha} ha)`;
 }
 
+let traitementEnregistrementEnCours = false;
+
+// Les unités du formulaire de traitement sont des quantités totales (L, mL, kg, g).
+// Lors d'une modification, on remplace le mouvement enregistré, sans recalculer l'ancien.
+function calculerStocksTraitement(produits, anciensProduits, catalogue) {
+  const mouvements = new Map();
+  function mouvement(produitId) {
+    const produit = catalogue.find(p => p.id === produitId);
+    if (!produit) return null; // Une ancienne référence peut avoir été supprimée.
+    if (produit.stock_actuel == null) return null;
+    if (!Number.isFinite(Number(produit.stock_actuel))) throw new Error('Stock invalide pour ' + produit.nom);
+    if (!mouvements.has(produitId)) mouvements.set(produitId, {
+      produit_id: produitId, nom: produit.nom,
+      unite: produit.conditionnement_unite || produit.unite_defaut || 'L',
+      disponible: Number(produit.stock_actuel), quantite: 0
+    });
+    return mouvements.get(produitId);
+  }
+  for (const ancien of anciensProduits) {
+    const m = mouvement(ancien.produit_id);
+    if (!m || ancien.quantite_utilisee == null) continue;
+    const q = convertirUnite(Number(ancien.quantite_utilisee), ancien.unite_quantite, m.unite);
+    if (q == null || !Number.isFinite(q) || q < 0) throw new Error('Ancien mouvement de stock invalide pour ' + m.nom);
+    m.disponible += q;
+  }
+  for (const produit of produits) {
+    if (!catalogue.some(p => p.id === produit.produit_id)) throw new Error('Un produit sélectionné est devenu inaccessible.');
+    if (!Number.isFinite(produit.dose) || produit.dose <= 0 || !['L', 'mL', 'kg', 'g'].includes(produit.unite)) {
+      throw new Error('Saisissez une quantité totale positive et une unité valide pour chaque produit.');
+    }
+    const m = mouvement(produit.produit_id);
+    if (!m) continue;
+    const q = convertirUnite(produit.dose, produit.unite, m.unite);
+    if (q == null || !Number.isFinite(q)) throw new Error('Unité incompatible avec le stock de ' + m.nom);
+    m.quantite += q;
+  }
+  return [...mouvements.values()].map(m => {
+    if (m.quantite - m.disponible > 1e-9) {
+      throw new Error('Stock insuffisant pour ' + m.nom + ' : ' +
+        Number(m.disponible.toFixed(3)) + ' ' + m.unite + ' disponibles, ' +
+        Number(m.quantite.toFixed(3)) + ' ' + m.unite + ' nécessaires.');
+    }
+    return { produit_id: m.produit_id, stock_actuel: Number((m.disponible - m.quantite).toFixed(3)) };
+  });
+}
+
 async function saveTraitement() {
+  if (traitementEnregistrementEnCours) return;
+  traitementEnregistrementEnCours = true;
+  const boutonEnregistrer = document.querySelector('#modal-traitement button[onclick="saveTraitement()"]');
+  if (boutonEnregistrer) boutonEnregistrer.disabled = true;
   try {
 
   if (!peut('traitements_creer')) { alert('Droit insuffisant pour enregistrer un traitement.'); return; }
@@ -7285,15 +7336,15 @@ async function saveTraitement() {
   // Récupérer les cibles cochées
   const cibles = [...document.querySelectorAll('#t-cibles input:checked')].map(c => c.value);
 
-  // Récupérer les produits cochés avec leurs doses
+  // Récupérer les quantités totales utilisées (pas des doses par hectare).
   const produits = [];
   document.querySelectorAll('input[data-prod-id]:checked').forEach(cb => {
     const pid = cb.dataset.prodId;
     const dose = parseFloat(document.getElementById(`tp-dose-${pid}`).value);
     const unite = document.getElementById(`tp-unit-${pid}`).value;
-    if (!isNaN(dose) && dose > 0) produits.push({ produit_id: pid, dose, unite });
+    produits.push({ produit_id: pid, dose, unite });
   });
-  if (produits.length === 0) { alert('Cochez au moins un produit avec une dose.'); return; }
+  if (produits.length === 0) { alert('Cochez au moins un produit avec une quantité.'); return; }
   if (!peut('stock_modifier')) {
     alert('Ce traitement modifie un stock suivi. Demandez le droit de modifier les stocks à votre dirigeant.'); return;
   }
@@ -7333,8 +7384,24 @@ async function saveTraitement() {
     parcelles: parcelles.map(p => p.parcelle_id)
   };
 
-  // Calcul des nouvelles quantités à débiter et stocker
-  const totalHa = parcelles.reduce((s,p) => s + ((p.surface_traitee||0) / 10000), 0);
+  // Contrôler tous les stocks avant la première écriture, avec des valeurs relues en base.
+  const produitsActuels = await ovLoadProduits(currentDomaine.id);
+  if (produitsActuels.error) throw new Error(produitsActuels.error.message);
+  if (!Array.isArray(produitsActuels.data)) throw new Error('Impossible de vérifier les stocks.');
+  cache.produits = produitsActuels.data;
+  let anciensProduits = [];
+  if (tid) {
+    const anciens = await sb.from('traitement_produits').select('*').eq('traitement_id', tid);
+    if (anciens.error) throw new Error(anciens.error.message);
+    anciensProduits = anciens.data || [];
+  }
+  let nouveauxStocks;
+  try {
+    nouveauxStocks = calculerStocksTraitement(produits, anciensProduits, cache.produits);
+  } catch (error) {
+    alert(error.message);
+    return;
+  }
   
   let traitementId;
   if (tid) {
@@ -7349,31 +7416,10 @@ async function saveTraitement() {
     traitementId = nd.id;
   }
 
-  // ===== Restitution du stock (en cas d'édition) =====
-  // On récupère les quantités exactes des anciens produits avant de les remplacer
-  if (tid) {
-    const oldTps = getTraitementProduits(tid);
-    for (const otp of oldTps) {
-      if (otp.quantite_utilisee != null && otp.unite_quantite) {
-        const prod = getProduit(otp.produit_id);
-        if (prod && prod.stock_actuel != null) {
-          const uniteStock = prod.conditionnement_unite || prod.unite_defaut || 'L';
-          const qteARestituer = convertirUnite(otp.quantite_utilisee, otp.unite_quantite, uniteStock);
-          if (qteARestituer != null) {
-            const nouveauStock = (prod.stock_actuel || 0) + qteARestituer;
-            await ovCheckedMutation(sb.from('produits').update({ stock_actuel: parseFloat(nouveauStock.toFixed(3)) }).eq('id', prod.id).select('id'), true);
-            prod.stock_actuel = parseFloat(nouveauStock.toFixed(3));
-          }
-        }
-      }
-    }
-  }
-  
-
   // Préparer les lignes traitement_produits avec quantité utilisée stockée
   const tpRows = produits.map((p,i) => {
-    const qteUtilisee = p.dose * totalHa; // quantité absolue (dose × ha)
-    const uniteQte = p.unite.split('/')[0]; // unité du numérateur (kg, L, g, mL)
+    const qteUtilisee = p.dose;
+    const uniteQte = p.unite;
     return {
       traitement_id: traitementId,
       produit_id: p.produit_id,
@@ -7389,32 +7435,37 @@ async function saveTraitement() {
   const tparcRows = parcelles.map(p => ({ traitement_id: traitementId, parcelle_id: p.parcelle_id, surface_traitee: p.surface_traitee, zone_precise: p.zone_precise }));
   if (tparcRows.length) await ovCheckedMutation(sb.from('traitement_parcelles').insert(tparcRows), false);
 
-  // Débiter le stock pour les nouveaux produits
-  for (const p of produits) {
-    const prod = getProduit(p.produit_id);
-    if (!prod || prod.stock_actuel == null) continue;
-    
-    const uniteStock = prod.conditionnement_unite || prod.unite_defaut || 'L';
-    const qteUtilisee = p.dose * totalHa;
-    const uniteQte = p.unite.split('/')[0];
-    const qteDebitee = convertirUnite(qteUtilisee, uniteQte, uniteStock);
-    
-    if (qteDebitee == null) continue; // unités incompatibles
-    
-    const nouveauStock = (prod.stock_actuel || 0) - qteDebitee;
-    await ovCheckedMutation(sb.from('produits').update({ stock_actuel: Math.max(0, parseFloat(nouveauStock.toFixed(3))) }).eq('id', prod.id).select('id'), true);
+  // Un seul mouvement net par produit, y compris lors d'une modification.
+  for (const mouvement of nouveauxStocks) {
+    await ovCheckedMutation(sb.from('produits').update({ stock_actuel: mouvement.stock_actuel })
+      .eq('id', mouvement.produit_id).select('id'), true);
   }
 
+  const preparationId = document.getElementById('modal-traitement').dataset.preparationId;
+  let avertissementPreparation = '';
+  if (preparationId) {
+    try {
+      await ovCheckedMutation(sb.from('preparations').update({ utilisee: true })
+        .eq('id', preparationId).select('id'), true);
+    } catch (error) {
+      avertissementPreparation = 'Traitement enregistré, mais le statut de la préparation n’a pas pu être actualisé : ' + error.message;
+    }
+  }
   await loadAllData();
+  delete document.getElementById('modal-traitement').dataset.preparationId;
   closeModal('modal-traitement');
   renderTraitements();
   renderDashboard();
   toast();
+  if (avertissementPreparation) alert(avertissementPreparation);
 
   } catch (error) {
     console.error('Enregistrement interrompu', error);
     alert('Enregistrement interrompu : ' + (error?.message || 'erreur inconnue') + '. Rechargez les données avant de réessayer.');
     return;
+  } finally {
+    traitementEnregistrementEnCours = false;
+    if (boutonEnregistrer) boutonEnregistrer.disabled = false;
   }
 }
 
