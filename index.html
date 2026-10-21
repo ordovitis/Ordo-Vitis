@@ -2949,7 +2949,7 @@ body.wk-lock { overflow:hidden; }
           <button type="button" class="btn-add-cepage" onclick="addCepageInput()">＋ Ajouter un cépage</button>
           <datalist id="cepages-list"><option value="Syrah"><option value="Viognier"><option value="Chardonnay"><option value="Pinot noir"><option value="Cabernet-Sauvignon"><option value="Merlot"><option value="Grenache"><option value="Sauvignon blanc"><option value="Gamay"><option value="Roussanne"><option value="Marsanne"><option value="Mourvèdre"><option value="Grenache blanc"><option value="Cinsault"><option value="Carignan"><option value="Chenin"></datalist>
         </div>
-        <div class="form-row"><label>Surface (ha) *</label><input type="number" id="p-surface" step="0.0001" min="0" required></div>
+        <div class="form-row"><label>Surface (ha) *</label><input type="number" id="p-surface" step="0.0001" min="0" required><div class="help-text">La surface doit être supérieure ou égale à 0.</div></div>
       </div>
       
       <!-- Caractéristiques (4 colonnes) -->
@@ -7937,14 +7937,34 @@ function openParcelleModal(pid) {
   document.getElementById('modal-parcelle').classList.add('active');
 }
 
+function lireSurfaceParcelle(saisie) {
+  const valeur = String(saisie).trim();
+  const surface = Number(valeur);
+  if (valeur === '' || !Number.isFinite(surface)) {
+    throw new Error('Saisissez une surface valide en hectares.');
+  }
+  if (surface < 0) {
+    throw new Error('La surface ne peut pas être négative.');
+  }
+  return surface;
+}
+
 async function saveParcelle() {
   try {
 
   const pid = document.getElementById('p-id').value;
   const nom = document.getElementById('p-nom').value.trim();
   const cepage = getCepageInputsValue();
-  const surface = parseFloat(document.getElementById('p-surface').value);
-  if (!nom||!cepage||isNaN(surface)) { alert('Remplissez les champs obligatoires (nom, cépage, surface).'); return; }
+  const champSurface = document.getElementById('p-surface');
+  if (!nom || !cepage || !champSurface.value.trim()) { alert('Remplissez les champs obligatoires (nom, cépage, surface).'); return; }
+  let surface;
+  try {
+    surface = lireSurfaceParcelle(champSurface.value);
+  } catch (error) {
+    alert(error.message);
+    champSurface.focus();
+    return;
+  }
   const data = {
     domaine_id: currentDomaine.id, nom, cepage, surface,
     annee: document.getElementById('p-annee').value ? parseInt(document.getElementById('p-annee').value) : null,
