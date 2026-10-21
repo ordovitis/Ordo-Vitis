@@ -60,19 +60,24 @@
 :root {
   --bordeaux: #6b1d2e; --bordeaux-dark: #4a1320; --vine: #4a5d3a;
   --cream: #faf6f0; --sand: #ebe4d6; --ink: #2a2420; --muted: #6b6258;
-  --border: #d4cabb; --warn: #c47a2e; --danger: #a8342f; --ok: #4a7d5a;
+  --border: #d4cabb; --warn: #87531c; --danger: #a8342f; --ok: #376647;
   /* Surfaces & accents (servent au thème clair/sombre) */
   --surface: #ffffff; --surface-2: #fbf8f3; --shadow: rgba(60,40,30,0.12);
   --on-brand: #faf6f0;   /* texte clair sur la sidebar bordeaux — reste clair dans les 2 thèmes */
+  color-scheme: light;
+  --ok-soft: #e3f0e6; --warn-soft: #fff2dd; --danger-soft: #fbe9e8; --accent-soft: #f3e8ed;
+  --on-vine: #fff; --on-danger: #fff; --on-accent: #fff;
   --accent: #6b1d2e;     /* accents texte (= bordeaux en clair, éclairci en sombre) */
 }
 :root[data-theme="dark"] {
-  --bordeaux: #6b1d2e; --bordeaux-dark: #45121d; --vine: #7d9460;
-  --cream: #16130f; --sand: #241f18; --ink: #f5f5f5; --muted: #b3ada3;
-  --border: #3a342b; --warn: #d4924a; --danger: #e0625c; --ok: #6fae84;
-  --surface: #211c16; --surface-2: #2b251d; --shadow: rgba(0,0,0,0.55);
-  --on-brand: #faf6f0;
-  --accent: #d98aa0;
+  color-scheme: dark;
+  --bordeaux: #81344b; --bordeaux-dark: #68283c; --vine: #a2bf96;
+  --cream: #171b20; --sand: #29313a; --ink: #eeeae5; --muted: #b5b9c0;
+  --border: #424d59; --warn: #e6bc7b; --danger: #f09b96; --ok: #a2c7ab;
+  --surface: #20262d; --surface-2: #282f38; --shadow: rgba(0,0,0,0.24);
+  --on-brand: #faf6f0; --accent: #edb0c0;
+  --ok-soft: #263a31; --warn-soft: #3b3327; --danger-soft: #402c31; --accent-soft: #3c2c37;
+  --on-vine: #17231a; --on-danger: #28191b; --on-accent: #291a20;
 }
 /* Surcharges sombres ciblées (composants à couleur "en dur" sortant mal) */
 :root[data-theme="dark"] .stat .value,
@@ -92,18 +97,16 @@
 :root[data-theme="dark"] .leaflet-popup-tip { background: var(--surface); color: var(--ink); }
 :root[data-theme="dark"] .leaflet-popup-content { color: var(--ink); }
 :root[data-theme="dark"] .leaflet-bar a,
-:root[data-theme="dark"] .leaflet-control-layers { background: var(--surface); color: var(--ink); }
+:root[data-theme="dark"] .leaflet-control-layers { background-color: var(--surface); color: var(--ink); }
 /* Texte des champs : suit le thème (sinon noir par défaut du navigateur) */
 input, select, textarea { color: var(--ink); }
 /* Fond des champs : suit le thème (sinon blanc par défaut du navigateur) */
 input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]), select, textarea { background-color: var(--surface); }
 input::placeholder, textarea::placeholder { color: var(--muted); opacity: 1; }
-/* Icônes natives (calendrier/horloge) lisibles en sombre */
-:root[data-theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator,
-:root[data-theme="dark"] input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.85); }
-/* L'écran de connexion garde ses champs blancs à texte foncé, isolé du thème */
-#auth-screen input, #auth-screen select, #auth-screen textarea { background-color: #ffffff; color: #2a2420; }
-#auth-screen input::placeholder, #auth-screen textarea::placeholder { color: #9a9087; }
+/* color-scheme adapte aussi les calendriers, listes et barres de défilement natifs. */
+/* Les champs de connexion utilisent les mêmes surfaces que les autres formulaires. */
+#auth-screen input, #auth-screen select, #auth-screen textarea { background-color: var(--surface); color: var(--ink); }
+#auth-screen input::placeholder, #auth-screen textarea::placeholder { color: var(--muted); }
 /* Surbrillance d'un produit/parcelle coché : discrète et sombre en mode sombre */
 :root[data-theme="dark"] .tp-item.checked,
 :root[data-theme="dark"] .tparc-item.checked { background: rgba(217,138,160,0.13); }
@@ -179,7 +182,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sa
   align-items: center;
   gap: 4px;
 }
-.auth-back:hover { color: var(--bordeaux); }
+.auth-back:hover { color: var(--accent); }
 
 .auth-title {
   font-family: 'Cormorant Garamond', Georgia, serif;
@@ -246,7 +249,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sa
   align-items: center;
   justify-content: center;
 }
-.auth-form-row .password-toggle:hover { color: var(--bordeaux); }
+.auth-form-row .password-toggle:hover { color: var(--accent); }
 .auth-form-row .help-text {
   font-size: 11px;
   color: var(--muted);
@@ -282,7 +285,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sa
   width: 100%;
   padding: 12px;
   background: transparent;
-  color: var(--bordeaux);
+  color: var(--accent);
   border: 1px solid var(--border);
   border-radius: 8px;
   font-size: 14px;
@@ -300,7 +303,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sa
   text-align: center;
   background: none;
   border: none;
-  color: var(--bordeaux);
+  color: var(--accent);
   font-size: 13px;
   cursor: pointer;
   padding: 12px;
@@ -309,7 +312,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sa
   text-decoration: underline;
   text-underline-offset: 2px;
 }
-.auth-link:hover { color: var(--bordeaux-dark); }
+.auth-link:hover { color: var(--accent); }
 
 /* Séparateur */
 .auth-divider {
@@ -330,7 +333,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sa
 
 /* Messages d'état */
 .auth-error { 
-  background: #fbe9e8; 
+  background:var(--danger-soft); 
   border-left: 3px solid var(--danger); 
   border-radius: 6px; 
   padding: 10px 14px; 
@@ -342,7 +345,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sa
 }
 .auth-error.show { display: block; }
 .auth-success { 
-  background: #e3f0e6; 
+  background:var(--ok-soft); 
   border-left: 3px solid var(--ok); 
   border-radius: 6px; 
   padding: 10px 14px; 
@@ -409,7 +412,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sa
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f7f4ed;
+  background:var(--surface-2);
   border-radius: 10px;
   flex-shrink: 0;
 }
@@ -419,7 +422,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sa
 .auth-choice-title {
   font-size: 15px;
   font-weight: 600;
-  color: var(--bordeaux);
+  color: var(--accent);
   margin-bottom: 2px;
 }
 .auth-choice-desc {
@@ -635,7 +638,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sa
 /* Grappe (logo) — hérite la couleur du contexte */
 .sidebar-domaine-icon { color: var(--on-brand); display: inline-flex; align-items: center; }
 .sidebar-domaine-icon svg { display: block; }
-.auth-grappe { color: var(--bordeaux); display: block; margin: 0 auto 14px; }
+.auth-grappe { color: var(--accent); display: block; margin: 0 auto 14px; }
 .sidebar-label { 
   white-space: nowrap; 
   overflow: hidden;
@@ -854,7 +857,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sa
 
 /* ===== BARRE DE TITRE DE VUE ===== */
 .page-head { display: flex; align-items: flex-end; gap: 14px; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
-.page-title { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 30px; font-weight: 600; color: var(--bordeaux); line-height: 1.1; letter-spacing: .2px; }
+.page-title { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 30px; font-weight: 600; color: var(--accent); line-height: 1.1; letter-spacing: .2px; }
 :root[data-theme="dark"] .page-title { color: var(--accent); }
 .page-date { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
 @media (max-width: 640px) {
@@ -867,20 +870,20 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sa
 .stat { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 15px 17px; box-shadow: 0 1px 2px var(--shadow); transition: box-shadow .15s, transform .15s; }
 .stat:hover { box-shadow: 0 4px 14px var(--shadow); transform: translateY(-1px); }
 .stat-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
-.stat-ico { width: 32px; height: 32px; border-radius: 9px; display: grid; place-items: center; background: var(--sand); color: var(--bordeaux); flex-shrink: 0; }
+.stat-ico { width: 32px; height: 32px; border-radius: 9px; display: grid; place-items: center; background: var(--sand); color: var(--accent); flex-shrink: 0; }
 .stat-ico.gold { color: var(--warn); }
 .stat-ico.vine { color: var(--ok); }
 :root[data-theme="dark"] .stat-ico { background: var(--surface-2); color: var(--accent); }
-.stat-link { display: inline-block; margin-top: 9px; font-size: 12px; font-weight: 600; color: var(--bordeaux); background: none; border: none; padding: 0; cursor: pointer; font-family: inherit; }
+.stat-link { display: inline-block; margin-top: 9px; font-size: 12px; font-weight: 600; color: var(--accent); background: none; border: none; padding: 0; cursor: pointer; font-family: inherit; }
 .stat-link:hover { text-decoration: underline; }
 :root[data-theme="dark"] .stat-link { color: var(--accent); }
 .stat .label { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
-.stat .value { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 38px; line-height: 1.05; font-weight: 600; color: var(--bordeaux); margin-top: 4px; font-variant-numeric: tabular-nums; }
+.stat .value { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 38px; line-height: 1.05; font-weight: 600; color: var(--accent); margin-top: 4px; font-variant-numeric: tabular-nums; }
 .stat .sub { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
 .stat.alert .value { color: var(--warn); }
-.section-title { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 21px; text-transform: none; letter-spacing: .2px; color: var(--bordeaux); margin: 22px 0 10px; font-weight: 600; }
-.alert-banner { background: #fdf3e3; border-left: 4px solid var(--warn); padding: 12px 14px; border-radius: 4px; margin-bottom: 10px; font-size: 14px; }
-.alert-banner.danger { background: #fbe9e8; border-left-color: var(--danger); }
+.section-title { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 21px; text-transform: none; letter-spacing: .2px; color: var(--accent); margin: 22px 0 10px; font-weight: 600; }
+.alert-banner { background:var(--warn-soft); border-left: 4px solid var(--warn); padding: 12px 14px; border-radius: 4px; margin-bottom: 10px; font-size: 14px; }
+.alert-banner.danger { background:var(--danger-soft); border-left-color: var(--danger); }
 .alert-banner strong { display: block; margin-bottom: 2px; }
 
 /* ===== TABLES ===== */
@@ -895,9 +898,9 @@ tr:last-child td { border-bottom: none; }
 tr.row-clickable { cursor: pointer; }
 tr.row-clickable:hover { background: var(--surface-2); }
 .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; }
-.badge.ok { background: #e3f0e6; color: var(--ok); }
-.badge.warn { background: #fbeed6; color: var(--warn); }
-.badge.danger { background: #f9e0df; color: var(--danger); }
+.badge.ok { background:var(--ok-soft); color: var(--ok); }
+.badge.warn { background:var(--warn-soft); color: var(--warn); }
+.badge.danger { background:var(--danger-soft); color: var(--danger); }
 .badge.neutral { background: var(--sand); color: var(--muted); }
 .empty { padding: 40px 20px; text-align: center; color: var(--muted); }
 .empty .ico { font-size: 36px; margin-bottom: 8px; opacity: 0.4; }
@@ -1013,7 +1016,7 @@ tr.row-clickable:hover { background: var(--surface-2); }
 /* Items enrichis pour produits et parcelles */
 .tp-item, .tparc-item { padding: 8px 6px; border-bottom: 1px solid var(--border); }
 .tp-item:last-child, .tparc-item:last-child { border-bottom: none; }
-.tp-item.checked, .tparc-item.checked { background: #f7f4ed; border-radius: 4px; border-bottom-color: transparent; margin-bottom: 2px; }
+.tp-item.checked, .tparc-item.checked { background:var(--surface-2); border-radius: 4px; border-bottom-color: transparent; margin-bottom: 2px; }
 .tp-row, .tparc-row { display: flex; align-items: center; gap: 8px; }
 .tp-row .tp-checkbox-label, .tparc-row .tparc-checkbox-label { flex: 1; display: flex; align-items: center; cursor: pointer; }
 .tp-row input[type="checkbox"], .tparc-row input[type="checkbox"] { margin-right: 8px; }
@@ -1032,7 +1035,7 @@ tr.row-clickable:hover { background: var(--surface-2); }
 
 /* ===== DRAG & DROP ===== */
 .drag-handle { cursor: grab; color: var(--muted); font-size: 18px; user-select: none; padding: 0 6px; line-height: 1; touch-action: none; }
-.drag-handle:hover { color: var(--bordeaux); }
+.drag-handle:hover { color: var(--accent); }
 .drag-handle:active { cursor: grabbing; }
 tr.dragging { opacity: 0.4; background: var(--sand) !important; }
 tr.drag-over-top td { box-shadow: inset 0 3px 0 var(--bordeaux); }
@@ -1123,7 +1126,7 @@ tr.drag-over-bottom td { box-shadow: inset 0 -3px 0 var(--bordeaux); }
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 21px;
   font-weight: 600;
-  color: var(--bordeaux);
+  color: var(--accent);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1275,7 +1278,7 @@ tr.drag-over-bottom td { box-shadow: inset 0 -3px 0 var(--bordeaux); }
   font-weight: 600;
   transition: all .15s;
 }
-.rap-add:hover { border-color: var(--bordeaux); color: var(--bordeaux); background: rgba(201,164,106,.08); }
+.rap-add:hover { border-color: var(--bordeaux); color: var(--accent); background: rgba(201,164,106,.08); }
 :root[data-theme="dark"] .rap-add { color: #C9A46A; }
 :root[data-theme="dark"] .rap-add:hover { border-color: var(--accent); color: var(--accent); background: rgba(201,164,106,.10); }
 .rap-add-icon { font-size: 26px; font-weight: 300; line-height: 1; }
@@ -1340,7 +1343,7 @@ tr.drag-over-bottom td { box-shadow: inset 0 -3px 0 var(--bordeaux); }
 .layer-toggle button { border: none; background: transparent; padding: 4px 10px; cursor: pointer; font-size: 12px; border-radius: 3px; color: var(--muted); font-family: inherit; }
 .layer-toggle button.active { background: var(--bordeaux); color: white; }
 .placement-banner { background: var(--bordeaux); color: white; padding: 12px 16px; border-radius: 6px; margin-bottom: 10px; font-size: 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.placement-banner button { background: var(--surface); color: var(--bordeaux); border: none; padding: 6px 12px; border-radius: 4px; font-weight: 600; cursor: pointer; font-family: inherit; font-size: 13px; }
+.placement-banner button { background: var(--surface); color: var(--accent); border: none; padding: 6px 12px; border-radius: 4px; font-weight: 600; cursor: pointer; font-family: inherit; font-size: 13px; }
 .map-popup-actions { display: flex; gap: 6px; margin-top: 8px; }
 .map-popup-actions button { background: var(--bordeaux); color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-family: inherit; }
 .map-popup-actions button.danger { background: var(--surface); color: var(--danger); border: 1px solid var(--danger); }
@@ -1353,7 +1356,7 @@ tr.drag-over-bottom td { box-shadow: inset 0 -3px 0 var(--bordeaux); }
 .parcelle-list-mini .item button { background: var(--bordeaux); color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-family: inherit; }
 .parcelle-list-mini .item button.placed-btn { background: var(--vine); }
 /* ===== CARTE MODERNISÉE (marqueur épingle SVG) ===== */
-.vigne-marker { position: relative; width: 30px; height: 38px; color: var(--bordeaux); cursor: pointer; filter: drop-shadow(0 3px 4px rgba(0,0,0,0.35)); transition: transform .15s ease; }
+.vigne-marker { position: relative; width: 30px; height: 38px; color: var(--accent); cursor: pointer; filter: drop-shadow(0 3px 4px rgba(0,0,0,0.35)); transition: transform .15s ease; }
 .vigne-marker:hover { transform: scale(1.1); }
 .vigne-marker svg { display: block; }
 .vigne-marker.dre { color: var(--warn); animation: pulse 1.6s infinite; }
@@ -1381,7 +1384,7 @@ tr.drag-over-bottom td { box-shadow: inset 0 -3px 0 var(--bordeaux); }
 /* Contrôles zoom aux couleurs de l'app (thème clair + sombre via variables) */
 .leaflet-control-zoom { border: none !important; box-shadow: 0 1px 4px rgba(60,40,30,0.18) !important; border-radius: 9px !important; overflow: hidden; }
 .leaflet-control-zoom a { background: var(--surface) !important; color: var(--ink) !important; border: none !important; width: 33px !important; height: 33px !important; line-height: 33px !important; }
-.leaflet-control-zoom a:hover { background: var(--surface-2) !important; color: var(--bordeaux) !important; }
+.leaflet-control-zoom a:hover { background: var(--surface-2) !important; color: var(--accent) !important; }
 .leaflet-control-zoom-in { border-bottom: 1px solid var(--border) !important; }
 
 /* Tooltip des polygones de parcelles */
@@ -1440,19 +1443,19 @@ body.no-stock .row-stock { display: none !important; }
 .tache-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; align-items: center; }
 .tache-chip { font-size: 12px; color: var(--muted); background: var(--cream); border: 1px solid var(--border); border-radius: 12px; padding: 2px 9px; white-space: nowrap; }
 .tache-chip.person { background: #eef3ec; border-color: #cfe0c9; color: #3a5d33; }
-.tache-chip.person.me { background: #f3e8ed; border-color: #e3c9d4; color: var(--bordeaux); }
-.tache-type { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .4px; color: var(--bordeaux); background: #f3e8ed; border-radius: 4px; padding: 2px 8px; }
+.tache-chip.person.me { background:var(--accent-soft); border-color: #e3c9d4; color: var(--accent); }
+.tache-type { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .4px; color: var(--accent); background:var(--accent-soft); border-radius: 4px; padding: 2px 8px; }
 .tache-urgent { font-size: 11px; font-weight: 700; color: #fff; background: var(--danger); border-radius: 4px; padding: 1px 7px; text-transform: uppercase; letter-spacing: .4px; }
 .tache-side { flex-shrink: 0; }
 .tache-statut-select { font-size: 12px; font-weight: 600; border: 1px solid var(--border); border-radius: 6px; padding: 5px 8px; background: var(--surface); cursor: pointer; font-family: inherit; }
-.tache-statut-select.s-a_faire { color: #8a6d2f; }
+.tache-statut-select.s-a_faire { color:var(--warn); }
 .tache-statut-select.s-en_cours { color: var(--warn); }
 .tache-statut-select.s-fait { color: var(--ok); }
 .tache-statut-select.s-annule { color: var(--muted); }
 .tache-statut-badge { font-size: 12px; font-weight: 600; border-radius: 12px; padding: 3px 10px; white-space: nowrap; }
-.tache-statut-badge.s-a_faire { background: #fbeed6; color: #8a6d2f; }
-.tache-statut-badge.s-en_cours { background: #fbeed6; color: var(--warn); }
-.tache-statut-badge.s-fait { background: #e3f0e6; color: var(--ok); }
+.tache-statut-badge.s-a_faire { background:var(--warn-soft); color:var(--warn); }
+.tache-statut-badge.s-en_cours { background:var(--warn-soft); color: var(--warn); }
+.tache-statut-badge.s-fait { background:var(--ok-soft); color: var(--ok); }
 .tache-statut-badge.s-annule { background: var(--sand); color: var(--muted); }
 .tache-check-list { display: flex; flex-direction: column; gap: 2px; max-height: 200px; overflow-y: auto; border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; background: var(--surface); }
 .form-row .tache-check { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: normal; text-transform: none; letter-spacing: 0; color: var(--ink); cursor: pointer; padding: 5px 4px; margin: 0; }
@@ -1583,8 +1586,8 @@ body.wk-lock { overflow:hidden; }
 @keyframes wkrise { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
 
 #view-wiki .wbadge { display:inline-block; padding:3px 9px; border-radius:12px; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.4px; }
-#view-wiki .wbadge.danger { background:#f9e0df; color:#a8342f; }
-#view-wiki .wbadge.warn { background:#fbeed6; color:#9a5a16; }
+#view-wiki .wbadge.danger { background:var(--danger-soft); color:var(--danger); }
+#view-wiki .wbadge.warn { background:var(--warn-soft); color:var(--warn); }
 #view-wiki .wbadge.neutral { background:var(--sand); color:var(--muted); }
 
 #view-wiki .profil-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; margin-bottom:18px; overflow:hidden; }
@@ -1679,8 +1682,8 @@ body.wk-lock { overflow:hidden; }
 #view-wiki .wk-callout { border-radius:9px; padding:14px 16px; font-size:14px; line-height:1.55; }
 #view-wiki .wk-callout .ct { font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:7px; display:flex; align-items:center; gap:7px; }
 #view-wiki .wk-callout ul { margin:0; padding-left:18px; } #view-wiki .wk-callout li { margin:4px 0; }
-#view-wiki .wk-callout.warn { background:#fbeed6; border:1px solid #e6c89a; color:#7a4e16; } #view-wiki .wk-callout.warn .ct { color:#9a5a16; }
-#view-wiki .wk-callout.ok { background:#e7f1ea; border:1px solid #b9d6c2; color:#2f4f3a; } #view-wiki .wk-callout.ok .ct { color:#3a7d54; }
+#view-wiki .wk-callout.warn { background:var(--warn-soft); border:1px solid #e6c89a; color:var(--warn); } #view-wiki .wk-callout.warn .ct { color:var(--warn); }
+#view-wiki .wk-callout.ok { background:var(--ok-soft); border:1px solid #b9d6c2; color:var(--ink); } #view-wiki .wk-callout.ok .ct { color:var(--ok); }
 #view-wiki .wk-two { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
 #view-wiki .perso { background:linear-gradient(135deg, #f6e9ec, #f1dde2); border:1px solid #dfb9c2; border-radius:11px; padding:18px 18px 16px; }
 #view-wiki .perso .pt { font-family:var(--wiki-serif); font-weight:600; font-size:17px; color:#6b1d2e; display:flex; align-items:center; gap:8px; }
@@ -1704,6 +1707,79 @@ body.wk-lock { overflow:hidden; }
 #view-wiki .btn-back { padding:9px 16px; background:var(--bordeaux); color:#fff; border:none; border-radius:6px; font-size:13.5px; font-weight:600; cursor:pointer; font-family:inherit; }
 #view-wiki .btn-back:hover { background:var(--bordeaux-dark); }
 @media(max-width:560px){ #view-wiki .wk-two { grid-template-columns:1fr; } }
+
+/* ===== Composants communs aux deux thèmes ===== */
+.rap-add { color: var(--warn); }
+#view-wiki .wcard .cat-tag { color: color-mix(in srgb, var(--waccent) 85%, black); }
+button, input, select, textarea { accent-color: var(--accent); }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 3px;
+}
+.auth-card { background: var(--surface-2); border: 1px solid var(--border); }
+.auth-form-row input:focus, .auth-form-row-grid input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.loading-overlay { background: var(--cream); }
+.sidebar-collapsed .sidebar-link::after { background: var(--surface); color: var(--ink); border: 1px solid var(--border); }
+.save-toast, .parcelle-list-mini .item button.placed-btn, #view-wiki .cep-chip.on { color: var(--on-vine); }
+.tache-urgent, #pc-gps-btn.recording, .cepage-del:hover, #view-wiki .seltag .x:hover { color: var(--on-danger); }
+#pc-repere-btn.active, .repere-num { color: var(--on-accent); }
+.sidebar-badge { color: #2a2420; }
+.alert-banner { color: var(--ink); }
+:root[data-theme="dark"] .role-badge.admin { background: #382e43; color: #d7b8ed; }
+
+/* Rappels et fiches : surfaces teintées, texte lisible, sans grandes plages blanches. */
+:root[data-theme="dark"] .rap-card { background: var(--warn-soft); border-color: var(--border); border-top-color: var(--warn); }
+:root[data-theme="dark"] .rap-card.haute, :root[data-theme="dark"] .rap-card.retard { background: var(--danger-soft); border-top-color: var(--danger); }
+:root[data-theme="dark"] .rap-card.basse { background: var(--ok-soft); border-top-color: var(--ok); }
+:root[data-theme="dark"] .rap-texte, :root[data-theme="dark"] .rap-delete { color: var(--ink); }
+:root[data-theme="dark"] .rap-parcelle, :root[data-theme="dark"] .rap-date { color: var(--muted); }
+:root[data-theme="dark"] .rap-echeance { border-color: var(--border); }
+:root[data-theme="dark"] .rap-card.fait { background: var(--surface-2) !important; opacity: 1; }
+:root[data-theme="dark"] .rap-card.fait .rap-texte { color: var(--muted); }
+.rap-badge.moyenne { background: var(--warn-soft); color: var(--warn); }
+:root[data-theme="dark"] .rap-badge.basse { background: var(--surface); color: var(--ok); }
+:root[data-theme="dark"] .rap-badge.ok { background: var(--surface); color: var(--muted); }
+:root[data-theme="dark"] #view-wiki .perso { background: var(--accent-soft); border-color: var(--border); }
+:root[data-theme="dark"] #view-wiki .perso .pt,
+:root[data-theme="dark"] #view-wiki .perso .adapt,
+:root[data-theme="dark"] #view-wiki .perso .note-loc b { color: var(--accent); }
+:root[data-theme="dark"] #view-wiki .perso .ptxt,
+:root[data-theme="dark"] #view-wiki .perso .note-loc { color: var(--ink); }
+:root[data-theme="dark"] #view-wiki .perso .note-loc { background: var(--surface); border-color: var(--border); }
+:root[data-theme="dark"] #view-wiki .perso .adapt { border-color: var(--border); }
+:root[data-theme="dark"] #view-wiki .wcard .cat-tag,
+:root[data-theme="dark"] #view-wiki .symp .org { color: color-mix(in srgb, var(--waccent) 45%, white); }
+#view-wiki .fiche-hero .tags .wbadge { background: var(--surface); }
+
+/* Leaflet : ne jamais écraser les images des contrôles avec un raccourci background. */
+.leaflet-bar, .leaflet-control-layers { border: 1px solid var(--border) !important; border-radius: 9px; box-shadow: 0 2px 8px var(--shadow); }
+.leaflet-bar a, .leaflet-control-layers { background-color: var(--surface); color: var(--ink); }
+.leaflet-bar a { border-bottom-color: var(--border); }
+.leaflet-bar a:hover, .leaflet-bar a:focus-visible { background-color: var(--surface-2); color: var(--accent); }
+.leaflet-bar a.leaflet-disabled, .leaflet-bar a.leaflet-disabled:hover { background-color: var(--surface-2); color: var(--muted); cursor: not-allowed; }
+.leaflet-draw-toolbar a { position: relative; width: 34px; height: 34px; line-height: 34px; background-image: none; }
+.leaflet-draw-toolbar a::before { content: ''; position: absolute; inset: 8px; background-color: currentColor; mask: var(--draw-icon) center / contain no-repeat; -webkit-mask: var(--draw-icon) center / contain no-repeat; }
+.leaflet-draw-toolbar .leaflet-draw-draw-polygon { --draw-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 7L14 3l7 8-5 10-12-4Z' fill='none' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+.leaflet-draw-toolbar .leaflet-draw-edit-edit { --draw-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M14 5l5 5M4 20l5-1L21 7l-4-4L5 15Z' fill='none' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+.leaflet-draw-toolbar .leaflet-draw-edit-remove { --draw-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7m4-7v7' fill='none' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+.leaflet-draw-toolbar a.leaflet-disabled::before { opacity: .5; }
+.leaflet-draw-actions a, .leaflet-draw-actions a:hover { background: var(--surface); color: var(--ink); border-color: var(--border); }
+.leaflet-draw-actions a:hover { background: var(--surface-2); color: var(--accent); }
+.leaflet-draw-tooltip { background: var(--surface); color: var(--ink); border: 1px solid var(--border); box-shadow: 0 2px 8px var(--shadow); }
+.leaflet-draw-tooltip:before { border-right-color: var(--border); }
+.leaflet-draw-tooltip-subtext { color: var(--muted); }
+.leaflet-error-draw-tooltip { background: var(--danger-soft); color: var(--danger); }
+.leaflet-container a.leaflet-popup-close-button { color: var(--muted); }
+.leaflet-container a.leaflet-popup-close-button:hover { color: var(--ink); }
+.leaflet-control-attribution { background: var(--surface) !important; color: var(--muted) !important; }
+.leaflet-control-attribution a, :root[data-theme="dark"] .leaflet-control-attribution a { color: var(--muted); }
+.leaflet-control-zoom a:hover { color: var(--accent) !important; }
+#drawing-instructions { width: min(680px, calc(100vw - 32px)); }
+@media (max-width: 600px) {
+  .leaflet-draw-actions { width: max-content; max-width: calc(100vw - 100px); height: auto; white-space: normal; }
+  .leaflet-draw-actions li { display: block; }
+  .leaflet-draw-actions a { height: auto; min-height: 34px; line-height: 1.35; padding: 9px 12px; white-space: normal; border-radius: 0; }
+}
+
 </style>
 </head>
 <body>
@@ -1794,7 +1870,7 @@ body.wk-lock { overflow:hidden; }
       
       <button class="auth-btn" id="join-btn" onclick="doVerifyCode()">Vérifier le code</button>
       
-      <div style="margin-top:18px; padding:10px 14px; background:#f7f4ed; border-radius:6px; font-size:12px; color:var(--muted); text-align:center; line-height:1.5;">
+      <div style="margin-top:18px; padding:10px 14px; background:var(--surface-2); border-radius:6px; font-size:12px; color:var(--muted); text-align:center; line-height:1.5;">
         Vous n'avez pas de code ?<br>
         Demandez-le au responsable de votre domaine.
       </div>
@@ -1808,7 +1884,7 @@ body.wk-lock { overflow:hidden; }
       
       <div class="auth-error" id="join-register-error"></div>
       
-      <div style="background:#e3f0e6; border-left:3px solid var(--ok); padding:12px 14px; border-radius:6px; margin-bottom:18px; font-size:13px; line-height:1.5;">
+      <div style="background:var(--ok-soft); border-left:3px solid var(--ok); padding:12px 14px; border-radius:6px; margin-bottom:18px; font-size:13px; line-height:1.5;">
         <strong>✓ Code valide !</strong><br>
         <span id="join-register-info"></span>
       </div>
@@ -1939,7 +2015,7 @@ body.wk-lock { overflow:hidden; }
       <div class="auth-error" id="reset-error"></div>
       <div class="auth-success" id="reset-success"></div>
       
-      <div style="background:#e3f0e6; border-left:3px solid var(--ok); padding:12px 14px; border-radius:6px; margin-bottom:18px; font-size:13px; line-height:1.5;">
+      <div style="background:var(--ok-soft); border-left:3px solid var(--ok); padding:12px 14px; border-radius:6px; margin-bottom:18px; font-size:13px; line-height:1.5;">
         <strong>✓ Lien validé</strong><br>
         Choisissez maintenant un nouveau mot de passe sécurisé.
       </div>
@@ -2146,7 +2222,7 @@ body.wk-lock { overflow:hidden; }
     <section id="view-rappels" class="view">
       <div class="toolbar" style="background:transparent; padding:0 0 14px 0; border:none; align-items:center; flex-wrap:wrap;">
         <div style="flex:1; min-width:200px;">
-          <div style="font-size:20px; font-weight:600; color:var(--bordeaux);">📌 Tous les rappels</div>
+          <div style="font-size:20px; font-weight:600; color: var(--accent);">📌 Tous les rappels</div>
           <div style="font-size:13px; color:var(--muted); margin-top:2px;">Notes rapides et choses à ne pas oublier</div>
         </div>
         <select id="rappels-filter-priorite" onchange="renderRappelsVue()" style="padding:8px 10px; border:1px solid var(--border); border-radius:5px; font-size:14px; background:var(--surface);">
@@ -2292,7 +2368,7 @@ body.wk-lock { overflow:hidden; }
             <div style="font-size:13px; opacity:0.85; margin-bottom:6px;">RÉCAPITULATIF</div>
             <div id="calc-recap" style="font-size:14px; line-height:1.7; margin-bottom:14px;"></div>
             <div style="display:flex; gap:8px; flex-wrap:wrap;">
-              <button class="btn" onclick="savePreparation()" style="background:var(--surface); color:var(--bordeaux); font-weight:600;">💾 Sauvegarder cette préparation</button>
+              <button class="btn" onclick="savePreparation()" style="background:var(--surface); color: var(--accent); font-weight:600;">💾 Sauvegarder cette préparation</button>
               <button class="btn" onclick="resetCalc()" style="background:transparent; color:white; border:1px solid rgba(255,255,255,0.4);">↺ Nouveau calcul</button>
             </div>
           </div>
@@ -2641,7 +2717,7 @@ body.wk-lock { overflow:hidden; }
   <div class="modal" style="max-width: 580px;">
     <div class="modal-header"><h2>Configurer les zones de la parcelle</h2><button class="modal-close" onclick="closeModal('modal-zones-meta')">×</button></div>
     <div class="modal-body">
-      <div style="background:#fff8e1; border-left:3px solid #f0a050; padding:10px 14px; margin-bottom:16px; font-size:13px; color:#5d4e2a; border-radius:0 6px 6px 0;">
+      <div style="background:var(--warn-soft); border-left:3px solid #f0a050; padding:10px 14px; margin-bottom:16px; font-size:13px; color:var(--warn); border-radius:0 6px 6px 0;">
         Votre parcelle <strong id="zm-parcelle-nom"></strong> comporte plusieurs zones. Personnalisez chacune (nom, cépage, couleur).
       </div>
       <input type="hidden" id="zm-parcelle-id">
@@ -2662,7 +2738,7 @@ body.wk-lock { overflow:hidden; }
       <input type="hidden" id="fe-id">
       <input type="hidden" id="fe-traitement-id">
       
-      <div style="background:#fff8e1; border-left:3px solid #f0a050; padding:10px 14px; margin-bottom:16px; font-size:13px; color:#5d4e2a; border-radius:0 6px 6px 0;">
+      <div style="background:var(--warn-soft); border-left:3px solid #f0a050; padding:10px 14px; margin-bottom:16px; font-size:13px; color:var(--warn); border-radius:0 6px 6px 0;">
         Cette fiche est conforme aux exigences MSA (fiche d'exposition aux produits CMR). Conservée 50 ans.
       </div>
       
@@ -2680,7 +2756,7 @@ body.wk-lock { overflow:hidden; }
       
       <!-- EPI -->
       <div style="margin-top:18px; padding-top:14px; border-top:1px solid var(--border);">
-        <div style="font-size:13px; font-weight:600; color:var(--bordeaux); margin-bottom:10px;">🦺 Équipements de protection individuelle</div>
+        <div style="font-size:13px; font-weight:600; color: var(--accent); margin-bottom:10px;">🦺 Équipements de protection individuelle</div>
         <div style="font-size:12px; color:var(--muted); margin-bottom:10px;">Cochez l'EPI fourni à l'applicateur ET celui qu'il a effectivement porté.</div>
         <div id="fe-epi-grid" style="display:grid; grid-template-columns: 1fr auto auto; gap:8px 12px; align-items:center; font-size:13px;">
           <!-- Rempli dynamiquement par JS -->
@@ -2689,7 +2765,7 @@ body.wk-lock { overflow:hidden; }
       
       <!-- Hygiène -->
       <div style="margin-top:18px; padding-top:14px; border-top:1px solid var(--border);">
-        <div style="font-size:13px; font-weight:600; color:var(--bordeaux); margin-bottom:10px;">🚿 Mesures d'hygiène post-traitement</div>
+        <div style="font-size:13px; font-weight:600; color: var(--accent); margin-bottom:10px;">🚿 Mesures d'hygiène post-traitement</div>
         <div id="fe-hygiene-list" style="display:flex; flex-direction:column; gap:6px; font-size:14px;">
           <label style="display:flex; align-items:center; gap:8px;"><input type="checkbox" id="fe-hyg-mains"> Lavage des mains</label>
           <label style="display:flex; align-items:center; gap:8px;"><input type="checkbox" id="fe-hyg-douche"> Douche prise après le traitement</label>
@@ -2701,7 +2777,7 @@ body.wk-lock { overflow:hidden; }
       
       <!-- Conditions spécifiques applicateur -->
       <div style="margin-top:18px; padding-top:14px; border-top:1px solid var(--border);">
-        <div style="font-size:13px; font-weight:600; color:var(--bordeaux); margin-bottom:10px;">🚜 Protection physique</div>
+        <div style="font-size:13px; font-weight:600; color: var(--accent); margin-bottom:10px;">🚜 Protection physique</div>
         <div style="font-size:12px; color:var(--muted); margin-bottom:10px;">Les conditions météo sont déjà saisies au niveau du traitement.</div>
         <div class="form-row">
           <label style="display:flex; align-items:center; gap:8px;">
@@ -2718,8 +2794,8 @@ body.wk-lock { overflow:hidden; }
       
       <!-- Signature -->
       <div style="margin-top:18px; padding:14px; background:var(--cream); border-radius:8px; border:1px dashed var(--bordeaux);">
-        <div style="font-size:13px; font-weight:600; color:var(--bordeaux); margin-bottom:10px;">✍️ Signature de l'applicateur</div>
-        <div id="fe-deja-signe" style="display:none; padding:8px; background:#e6f4ea; border-radius:5px; font-size:13px; color:#1b5e20;">
+        <div style="font-size:13px; font-weight:600; color: var(--accent); margin-bottom:10px;">✍️ Signature de l'applicateur</div>
+        <div id="fe-deja-signe" style="display:none; padding:8px; background:var(--ok-soft); border-radius:5px; font-size:13px; color:var(--ok);">
           ✓ Signée le <span id="fe-date-signature"></span>
         </div>
         <div id="fe-pas-signee">
@@ -2866,7 +2942,7 @@ body.wk-lock { overflow:hidden; }
         <div class="traitement-col">
           <!-- Conditions météo (registre 2026) -->
           <div style="padding:14px; background:var(--cream); border-radius:8px;">
-            <div style="font-size:13px; font-weight:600; color:var(--bordeaux); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.5px;">🌦 Conditions du traitement</div>
+            <div style="font-size:13px; font-weight:600; color: var(--accent); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.5px;">🌦 Conditions du traitement</div>
             <div style="font-size:12px; color:var(--muted); margin-bottom:10px;">Vent < 19 km/h obligatoire (arrêté 4 mai 2017).</div>
             <div class="form-grid">
               <div class="form-row">
@@ -2895,7 +2971,7 @@ body.wk-lock { overflow:hidden; }
           <!-- Fiches EPI -->
           <div style="margin-top:14px; padding:14px; background:var(--cream); border-radius:8px;">
             <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; gap:8px; flex-wrap:wrap;">
-              <div style="font-size:13px; font-weight:600; color:var(--bordeaux); text-transform:uppercase; letter-spacing:0.5px;">🦺 Fiches EPI applicateurs</div>
+              <div style="font-size:13px; font-weight:600; color: var(--accent); text-transform:uppercase; letter-spacing:0.5px;">🦺 Fiches EPI applicateurs</div>
               <button type="button" class="btn btn-secondary btn-icon" onclick="addFicheEpiRow()" style="font-size:12px;">+ Applicateur</button>
             </div>
             <div style="font-size:12px; color:var(--muted); margin-bottom:10px;">Pour chaque personne ayant réalisé le traitement, créez une fiche signable.</div>
@@ -2971,7 +3047,7 @@ body.wk-lock { overflow:hidden; }
       <div id="p-contour-section" style="display:none; margin-top:8px; padding:12px 14px; background:var(--cream); border-radius:8px; border:1px solid var(--border);">
         <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:10px;">
           <div>
-            <div style="font-size:13px; font-weight:600; color:var(--bordeaux);">📐 Contour précis sur la carte</div>
+            <div style="font-size:13px; font-weight:600; color: var(--accent);">📐 Contour précis sur la carte</div>
             <div id="p-contour-info" style="font-size:12px; color:var(--muted); margin-top:4px;">Aucun contour défini</div>
           </div>
           <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:flex-end;">
@@ -2988,7 +3064,7 @@ body.wk-lock { overflow:hidden; }
       
       <!-- Soleil & effeuillage -->
       <div id="p-soleil-section" style="display:none; margin-top:8px; padding:12px 14px; background:var(--cream); border-radius:8px; border:1px solid var(--border);">
-        <div style="font-size:13px; font-weight:600; color:var(--bordeaux); margin-bottom:8px;">☀️ Soleil &amp; effeuillage</div>
+        <div style="font-size:13px; font-weight:600; color: var(--accent); margin-bottom:8px;">☀️ Soleil &amp; effeuillage</div>
         <div id="p-soleil-nogps" style="display:none; font-size:12px; color:var(--muted);">Renseigne la position GPS (latitude / longitude) ci-dessus, puis enregistre, pour activer le calcul du soleil.</div>
         <div id="p-soleil-body" style="display:none;">
           <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:flex-start;">
@@ -3035,7 +3111,7 @@ body.wk-lock { overflow:hidden; }
       <!-- Carnet de la parcelle -->
       <div id="p-carnet-section" style="display:none; margin-top:20px; padding-top:20px; border-top:2px solid var(--border);">
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
-          <div style="font-size:15px; font-weight:600; color:var(--bordeaux);">📓 Carnet de la parcelle</div>
+          <div style="font-size:15px; font-weight:600; color: var(--accent);">📓 Carnet de la parcelle</div>
           <button type="button" class="btn btn-secondary btn-icon" onclick="openNoteModal()">+ Nouvelle entrée</button>
         </div>
         <div style="font-size:12px; color:var(--muted); margin-bottom:10px;">Historique chronologique des informations (plantations, anecdotes, observations...)</div>
@@ -3101,7 +3177,7 @@ body.wk-lock { overflow:hidden; }
       
       <!-- Section Prix & Stock -->
       <div style="margin-top:20px; padding-top:18px; border-top:2px solid var(--border);">
-        <div style="font-size:13px; font-weight:600; color:var(--bordeaux); margin-bottom:14px; text-transform:uppercase; letter-spacing:0.5px;">💰 Prix & Stock</div>
+        <div style="font-size:13px; font-weight:600; color: var(--accent); margin-bottom:14px; text-transform:uppercase; letter-spacing:0.5px;">💰 Prix & Stock</div>
         
         <!-- 3 colonnes : conditionnement, prix, seuil alerte -->
         <div class="form-grid-3">
@@ -3179,7 +3255,7 @@ body.wk-lock { overflow:hidden; }
           Vous allez générer un code à 8 caractères valable <strong>24 heures</strong>, à transmettre à la personne invitée.
         </div>
         
-        <div id="invitation-error" style="display:none; background:#fbe9e8; border-left:3px solid var(--danger); padding:10px 14px; border-radius:6px; color:var(--danger); margin-bottom:14px; font-size:13px;"></div>
+        <div id="invitation-error" style="display:none; background:var(--danger-soft); border-left:3px solid var(--danger); padding:10px 14px; border-radius:6px; color:var(--danger); margin-bottom:14px; font-size:13px;"></div>
         
         <div class="form-row">
           <label>Email de la personne à inviter *</label>
@@ -3202,13 +3278,13 @@ body.wk-lock { overflow:hidden; }
       <div id="invitation-result-view" style="display:none;">
         <div style="text-align:center; margin-bottom:20px;">
           <div style="font-size:48px; margin-bottom:8px;">✓</div>
-          <div style="font-size:18px; font-weight:600; color:var(--bordeaux); margin-bottom:4px;">Invitation créée !</div>
+          <div style="font-size:18px; font-weight:600; color: var(--accent); margin-bottom:4px;">Invitation créée !</div>
           <div style="font-size:13px; color:var(--muted);">Transmettez ce code à <strong id="inv-result-email"></strong></div>
         </div>
         
-        <div style="background:#f7f4ed; border:2px dashed var(--bordeaux); border-radius:10px; padding:24px; text-align:center; margin-bottom:18px;">
+        <div style="background:var(--surface-2); border:2px dashed var(--bordeaux); border-radius:10px; padding:24px; text-align:center; margin-bottom:18px;">
           <div style="font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Code d'invitation</div>
-          <div id="inv-result-code" style="font-family:'Courier New',monospace; font-size:36px; font-weight:700; color:var(--bordeaux); letter-spacing:8px; margin:8px 0;">XXXXXXXX</div>
+          <div id="inv-result-code" style="font-family:'Courier New',monospace; font-size:36px; font-weight:700; color: var(--accent); letter-spacing:8px; margin:8px 0;">XXXXXXXX</div>
           <div style="font-size:12px; color:var(--muted);">Valable jusqu'au <span id="inv-result-expiration"></span></div>
         </div>
         
@@ -3217,7 +3293,7 @@ body.wk-lock { overflow:hidden; }
           <button class="btn btn-secondary" onclick="partagerCodeInvitation()" style="flex:1;">✉️ Partager</button>
         </div>
         
-        <div style="background:#fffaeb; border-left:3px solid var(--warn); padding:12px 14px; border-radius:6px; font-size:13px; color:#7a5a0a; line-height:1.5;">
+        <div style="background:var(--warn-soft); border-left:3px solid var(--warn); padding:12px 14px; border-radius:6px; font-size:13px; color:var(--warn); line-height:1.5;">
           <strong>💡 Comment ça marche pour l'invité :</strong><br>
           1. Il va sur l'app et clique sur "Créer un compte"<br>
           2. Il choisit "Rejoindre un domaine"<br>
@@ -3258,7 +3334,7 @@ body.wk-lock { overflow:hidden; }
       
       <!-- Section permissions (visible seulement pour permanent) -->
       <div id="mm-permissions-section" style="display:none;">
-        <div style="font-size:13px; font-weight:600; color:var(--bordeaux); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:10px; padding-top:10px; border-top:1px solid var(--border);">
+        <div style="font-size:13px; font-weight:600; color: var(--accent); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:10px; padding-top:10px; border-top:1px solid var(--border);">
           🎛 Droits du Permanent
         </div>
         
@@ -3278,7 +3354,7 @@ body.wk-lock { overflow:hidden; }
       </div>
       
       <!-- Info pour saisonnier -->
-      <div id="mm-saisonnier-info" style="display:none; padding:12px 14px; background:#fff8e1; border-left:3px solid #f0a050; border-radius:0 6px 6px 0; font-size:13px; color:#5d4e2a; margin-top:10px;">
+      <div id="mm-saisonnier-info" style="display:none; padding:12px 14px; background:var(--warn-soft); border-left:3px solid #f0a050; border-radius:0 6px 6px 0; font-size:13px; color:var(--warn); margin-top:10px;">
         Les saisonniers ont des droits fixes en lecture seule :
         <ul style="margin:8px 0 0 22px; padding:0;">
           <li>Voir la carte des parcelles</li>
@@ -3288,7 +3364,7 @@ body.wk-lock { overflow:hidden; }
       </div>
       
       <!-- Info pour admin -->
-      <div id="mm-admin-info" style="display:none; padding:12px 14px; background:#fff8e1; border-left:3px solid #f0a050; border-radius:0 6px 6px 0; font-size:13px; color:#5d4e2a; margin-top:10px;">
+      <div id="mm-admin-info" style="display:none; padding:12px 14px; background:var(--warn-soft); border-left:3px solid #f0a050; border-radius:0 6px 6px 0; font-size:13px; color:var(--warn); margin-top:10px;">
         Les patrons ont accès à TOUT, y compris la gestion des autres membres. À n'attribuer qu'à des personnes de pleine confiance.
       </div>
     </div>
@@ -3582,7 +3658,7 @@ function renderCalcProduits() {
         <select class="tp-unit-select" onchange="updateCalcLine('${p.id}','unite',this.value)">
           ${unitesDispo.map(u => `<option value="${u.value}" ${u.value===unite?'selected':''}>${u.value}</option>`).join('')}
         </select>
-        <span style="font-weight:600; color:var(--bordeaux); margin-left:8px;" id="calc-result-${p.id}">—</span>
+        <span style="font-weight:600; color: var(--accent); margin-left:8px;" id="calc-result-${p.id}">—</span>
       </div>
     </div>`;
   }).join('');
@@ -3904,7 +3980,7 @@ function renderHistorique() {
         }
       });
       const volumeEau = volTotal - volumeProduitsLiquides;
-      volumeEauInfo = `<div style="font-size:12px; color:var(--bordeaux); margin-top:4px;">💧 ${volTotal.toFixed(1)} L de bouillie (${volumeEau.toFixed(1)} L d'eau)`;
+      volumeEauInfo = `<div style="font-size:12px; color: var(--accent); margin-top:4px;">💧 ${volTotal.toFixed(1)} L de bouillie (${volumeEau.toFixed(1)} L d'eau)`;
       if (prep.capacite_atomiseur_utilisee) {
         const nbPassages = Math.ceil(volTotal / prep.capacite_atomiseur_utilisee);
         volumeEauInfo += ` · 🔄 ${nbPassages} passage${nbPassages>1?'s':''} de ${prep.capacite_atomiseur_utilisee} L`;
@@ -4269,7 +4345,7 @@ function updateVentWarning() {
   if (!isNaN(vent) && vent >= 19) {
     el.innerHTML = `<span style="color:var(--danger); font-weight:600;">⚠️ Vent ≥ 19 km/h : traitement interdit par la réglementation</span>`;
   } else if (!isNaN(vent) && vent >= 15) {
-    el.innerHTML = `<span style="color:#b8860b; font-weight:500;">⚠ Vent ≥ 15 km/h : prudence, dérive possible</span>`;
+    el.innerHTML = `<span style="color:var(--warn); font-weight:500;">⚠ Vent ≥ 15 km/h : prudence, dérive possible</span>`;
   } else {
     el.innerHTML = '';
   }
@@ -4317,8 +4393,8 @@ function renderFichesEpiList(traitementId) {
   container.innerHTML = fiches.map(f => {
     const nomComplet = `${f.applicateur_prenom || ''} ${f.applicateur_nom}`.trim();
     const signeBadge = f.signe 
-      ? `<span style="display:inline-block; padding:2px 8px; background:#e6f4ea; color:#1b5e20; border-radius:10px; font-size:11px; font-weight:600;">✓ Signée</span>`
-      : `<span style="display:inline-block; padding:2px 8px; background:#fff3cd; color:#856404; border-radius:10px; font-size:11px; font-weight:600;">⚠ Non signée</span>`;
+      ? `<span style="display:inline-block; padding:2px 8px; background:var(--ok-soft); color:var(--ok); border-radius:10px; font-size:11px; font-weight:600;">✓ Signée</span>`
+      : `<span style="display:inline-block; padding:2px 8px; background:var(--warn-soft); color:var(--warn); border-radius:10px; font-size:11px; font-weight:600;">⚠ Non signée</span>`;
     
     return `<div style="padding:12px 14px; background:var(--surface); border-left:3px solid var(--bordeaux); border-radius:0 6px 6px 0; margin-bottom:8px; cursor:pointer;" onclick="openFicheEpiModal('${f.id}')">
       <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
@@ -6298,7 +6374,7 @@ function applyTheme(theme) {
   if (label) label.textContent = theme === 'dark' ? 'Mode clair' : 'Mode sombre';
   if (btn) btn.title = theme === 'dark' ? 'Repasser en clair' : 'Passer en sombre';
   const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute('content', theme === 'dark' ? '#16130f' : '#6d1f3a');
+  if (meta) meta.setAttribute('content', theme === 'dark' ? '#171b20' : '#6d1f3a');
 }
 function toggleTheme() {
   const next = getCurrentTheme() === 'dark' ? 'light' : 'dark';
@@ -6529,7 +6605,7 @@ async function doVerifyCode() {
       `Vous allez rejoindre <strong>${escapeHtml(result.out_domaine_nom)}</strong> en tant que <strong>${roleLabel}</strong>.`;
     document.getElementById('jreg-email').value = result.out_email_attendu;
     document.getElementById('jreg-email').readOnly = true;
-    document.getElementById('jreg-email').style.background = '#f7f4ed';
+    document.getElementById('jreg-email').style.background = 'var(--surface-2)';
     
     showAuthView('join-register');
     setTimeout(() => document.getElementById('jreg-prenom')?.focus(), 100);
@@ -6978,7 +7054,7 @@ function renderDashboard() {
       return `<li style="margin:3px 0;"><strong>${p.nom}</strong> — ${p.stock_actuel} ${unite} restants</li>`;
     }).join('');
     
-    ac.innerHTML += `<div class="alert-banner" style="background:#fff5e6; border-color:#f0a050; color:#8b4513;">
+    ac.innerHTML += `<div class="alert-banner" style="background:var(--warn-soft); border-color:#f0a050; color:var(--warn);">
       <strong>📦 Stock — ${produitsAlertes.length} produit${produitsAlertes.length>1?'s à recommander':' à recommander'}</strong>
       <ul style="margin:8px 0 0 0; padding-left:22px; font-weight:normal;">${items}</ul>
     </div>`;
@@ -6997,7 +7073,7 @@ function renderDashboard() {
     const d = dreStatus(t);
     const badge = d ? (d.active ? `<span class="badge ${d.heuresRestantes<=2?'danger':'warn'}">${formatH(d.heuresRestantes)}</span>` : '<span class="badge ok">OK</span>') : '<span class="badge neutral">—</span>';
     const cibles = (t.cibles||[]).join(', ') || t.cible || '—';
-    return `<tr><td>${fmtDate(t.date)}${t.numero_traitement?`<br><span style="font-size:11px;color:var(--bordeaux);font-weight:600">N°${t.numero_traitement}</span>`:''}${t.numero_passe?`<br><span style="font-size:11px;color:var(--muted)">${t.numero_passe}</span>`:''}</td><td>${getProduitsResume(t)}</td><td class="hide-mobile">${noms.slice(0,2).join(', ')}${noms.length>2?` +${noms.length-2}`:''}</td><td>${cibles}</td><td class="hide-mobile">${badge}</td></tr>`;
+    return `<tr><td>${fmtDate(t.date)}${t.numero_traitement?`<br><span style="font-size:11px;color: var(--accent);font-weight:600">N°${t.numero_traitement}</span>`:''}${t.numero_passe?`<br><span style="font-size:11px;color:var(--muted)">${t.numero_passe}</span>`:''}</td><td>${getProduitsResume(t)}</td><td class="hide-mobile">${noms.slice(0,2).join(', ')}${noms.length>2?` +${noms.length-2}`:''}</td><td>${cibles}</td><td class="hide-mobile">${badge}</td></tr>`;
   }).join('');
   
   // Afficher les rappels
@@ -7068,7 +7144,7 @@ function renderTraitements() {
     const d = dreStatus(t);
     const badge = d ? (d.active ? `<span class="badge ${d.heuresRestantes<=2?'danger':'warn'}">${formatH(d.heuresRestantes)} rest.</span>` : '<span class="badge ok">Terminé</span>') : '<span class="badge neutral">—</span>';
     const cibles = (t.cibles||[]).join(', ') || t.cible || '—';
-    const dateCol = `${fmtDate(t.date)}${t.heure?` <span style="font-size:11px;color:var(--muted)">${t.heure}</span>`:''}${t.numero_traitement?`<br><span style="font-size:11px;color:var(--bordeaux);font-weight:600">Traitement N°${t.numero_traitement}</span>`:''}${t.numero_passe?`<br><span style="font-size:11px;color:var(--muted)">${t.numero_passe}</span>`:''}`;
+    const dateCol = `${fmtDate(t.date)}${t.heure?` <span style="font-size:11px;color:var(--muted)">${t.heure}</span>`:''}${t.numero_traitement?`<br><span style="font-size:11px;color: var(--accent);font-weight:600">Traitement N°${t.numero_traitement}</span>`:''}${t.numero_passe?`<br><span style="font-size:11px;color:var(--muted)">${t.numero_passe}</span>`:''}`;
     const tps = getTraitementProduits(t.id);
     const dosesTxt = tps.length > 0 ? tps.map(tp => `${tp.dose} ${tp.unite}`).slice(0,2).join(' / ') + (tps.length>2?` +${tps.length-2}`:'') : (t.dose||'—');
     return `<tr class="row-clickable" onclick="openTraitementModal('${t.id}')"><td>${dateCol}</td><td>${getProduitsResume(t)}</td><td class="hide-mobile">${cibles}</td><td>${noms.slice(0,2).join(', ')}${noms.length>2?` +${noms.length-2}`:''}</td><td class="hide-mobile">${dosesTxt}</td><td class="hide-mobile">${badge}</td><td style="white-space:nowrap;"><button class="btn btn-secondary btn-icon" onclick="event.stopPropagation();duplicateTraitement('${t.id}')" title="Dupliquer">📋</button> <button class="btn btn-secondary btn-icon" onclick="event.stopPropagation();deleteTraitement('${t.id}')" title="Supprimer">🗑</button></td></tr>`;
@@ -7784,7 +7860,7 @@ function afficherBarreOrientation(parcelle) {
   bar.id = 'orientation-instructions';
   bar.style.cssText = 'position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:var(--surface); padding:14px 20px; border-radius:10px; box-shadow:0 4px 20px rgba(0,0,0,0.2); z-index:1500; max-width:92%; text-align:center;';
   bar.innerHTML =
-    '<div style="font-weight:600; color:var(--bordeaux); margin-bottom:6px;">📐 Orientation des rangs : ' + (parcelle.nom || '').replace(/</g, '&lt;') + '</div>' +
+    '<div style="font-weight:600; color: var(--accent); margin-bottom:6px;">📐 Orientation des rangs : ' + (parcelle.nom || '').replace(/</g, '&lt;') + '</div>' +
     '<div id="orientation-msg" style="font-size:13px; color:var(--muted); margin-bottom:10px;">Clique <strong>2 points</strong> le long d\'un rang sur la photo aérienne.</div>' +
     '<button id="orientation-valider" class="btn btn-primary" onclick="validerOrientationRangs()" style="margin-right:8px; display:none;">✓ Valider</button>' +
     '<button id="orientation-undo" class="btn btn-secondary" onclick="annulerDernierPointOrientation()" style="margin-right:8px; display:none;">↩ Annuler le dernier point</button>' +
@@ -7908,12 +7984,12 @@ function openParcelleModal(pid) {
       const surfaceHa = p.surface_calculee_m2 / 10000;
       const nbZones = polygonToZones(p.polygone).length;
       const zoneInfo = nbZones > 1 ? ` · <strong>${nbZones} zones</strong>` : '';
-      infoEl.innerHTML = `<span style="color:#2d8a48;">✓ Contour défini</span> · ${p.surface_calculee_m2.toFixed(0)} m² (${surfaceHa.toFixed(4)} ha)${zoneInfo}`;
+      infoEl.innerHTML = `<span style="color:var(--ok);">✓ Contour défini</span> · ${p.surface_calculee_m2.toFixed(0)} m² (${surfaceHa.toFixed(4)} ha)${zoneInfo}`;
       // Afficher le bouton "Configurer les zones" si multi-zones
       const zonesBtn = document.getElementById('p-configurer-zones-btn');
       if (zonesBtn) zonesBtn.style.display = nbZones > 1 ? 'inline-flex' : 'none';
     } else if (p.polygone) {
-      infoEl.innerHTML = `<span style="color:#2d8a48;">✓ Contour défini</span>`;
+      infoEl.innerHTML = `<span style="color:var(--ok);">✓ Contour défini</span>`;
       const zonesBtn = document.getElementById('p-configurer-zones-btn');
       if (zonesBtn) zonesBtn.style.display = 'none';
     } else {
@@ -8122,9 +8198,9 @@ function renderProduits() {
         : false;
       const unite = p.conditionnement_unite || p.unite_defaut || '';
       if (p.stock_actuel <= 0) {
-        stockBadge = `<span style="display:inline-block; padding:2px 6px; background:#fee; color:var(--danger); border-radius:4px; font-size:11px; font-weight:600;">⚠️ Épuisé</span>`;
+        stockBadge = `<span style="display:inline-block; padding:2px 6px; background:var(--danger-soft); color:var(--danger); border-radius:4px; font-size:11px; font-weight:600;">⚠️ Épuisé</span>`;
       } else if (stockBas) {
-        stockBadge = `<span style="display:inline-block; padding:2px 6px; background:#fee; color:var(--danger); border-radius:4px; font-size:11px; font-weight:600;">⚠️ ${p.stock_actuel} ${unite}</span>`;
+        stockBadge = `<span style="display:inline-block; padding:2px 6px; background:var(--danger-soft); color:var(--danger); border-radius:4px; font-size:11px; font-weight:600;">⚠️ ${p.stock_actuel} ${unite}</span>`;
       } else {
         stockBadge = `<span style="font-size:12px; color:var(--muted);">${p.stock_actuel} ${unite}</span>`;
       }
@@ -8133,12 +8209,12 @@ function renderProduits() {
     // Cibles visées affichées
     const cibles = p.cibles_visees || [];
     const ciblesHtml = cibles.length > 0
-      ? cibles.map(c => `<span style="display:inline-block; padding:2px 7px; background:#f3e8ed; color:var(--bordeaux); border-radius:10px; font-size:11px; margin:1px 3px 1px 0;">${c}</span>`).join('')
+      ? cibles.map(c => `<span style="display:inline-block; padding:2px 7px; background:var(--accent-soft); color: var(--accent); border-radius:10px; font-size:11px; margin:1px 3px 1px 0;">${c}</span>`).join('')
       : '—';
     
     return `<tr class="row-clickable" onclick="openProduitModal('${p.id}')">
       <td><strong>${p.nom}</strong>${stockBadge ? '<br>' + stockBadge : ''}</td>
-      <td><span style="font-size:13px; color:var(--bordeaux);">${p.type||'—'}</span></td>
+      <td><span style="font-size:13px; color: var(--accent);">${p.type||'—'}</span></td>
       <td class="hide-mobile">${ciblesHtml}</td>
       <td class="hide-mobile">${p.dre??'—'}</td>
       <td class="hide-mobile">${p.amm||'—'}</td>
@@ -8291,7 +8367,7 @@ function updateProduitCalculs() {
     } else if (pourcentage < seuil) {
       stockInfoEl.innerHTML = `<span style="color:var(--danger); font-weight:600;">⚠️ Stock bas (< ${seuil}%)</span> — soit ${stock.toFixed(2)} ${uniteCond} (${nbBidons.toFixed(2)} ${motPluriel})`;
     } else {
-      stockInfoEl.innerHTML = `<span style="color:var(--bordeaux); font-weight:500;">${stock.toFixed(2)} ${uniteCond}</span> soit ${nbBidons.toFixed(2)} ${motPluriel}`;
+      stockInfoEl.innerHTML = `<span style="color: var(--accent); font-weight:500;">${stock.toFixed(2)} ${uniteCond}</span> soit ${nbBidons.toFixed(2)} ${motPluriel}`;
     }
   }
 }
@@ -8594,7 +8670,7 @@ function renderPermissionsList(currentPerms) {
   container.style.gap = '12px';
   container.innerHTML = PERMISSIONS.map(group => `
     <div style="padding:12px; background:var(--cream); border-radius:6px;">
-      <div style="font-size:12px; font-weight:600; color:var(--bordeaux); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">${group.group}</div>
+      <div style="font-size:12px; font-weight:600; color: var(--accent); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">${group.group}</div>
       <div style="display:flex; flex-direction:column; gap:6px;">
         ${group.items.map(p => `
           <label style="display:flex; align-items:center; gap:8px; font-size:14px; cursor:pointer;">
@@ -8823,7 +8899,7 @@ function renderInvitations() {
       <div style="flex:1; min-width:200px;">
         <div style="font-weight:600; font-size:14px; margin-bottom:2px;">${inv.email}</div>
         <div style="font-size:12px; color:var(--muted);">
-          ${roleLabel} · Code <code style="background:var(--surface-2); padding:2px 6px; border-radius:3px; font-family:monospace; color:var(--bordeaux); font-weight:600;">${inv.code}</code> · Expire dans ${heuresRestantes}h
+          ${roleLabel} · Code <code style="background:var(--surface-2); padding:2px 6px; border-radius:3px; font-family:monospace; color: var(--accent); font-weight:600;">${inv.code}</code> · Expire dans ${heuresRestantes}h
         </div>
       </div>
       <div style="display:flex; gap:6px;">
@@ -9059,7 +9135,7 @@ function openZonesMetaModal(parcelleId, surfacesParZone) {
     ).join('');
     
     return `<div style="padding:14px; border:1px solid var(--border); border-radius:8px; margin-bottom:10px; background:var(--cream);">
-      <div style="font-size:13px; font-weight:600; color:var(--bordeaux); margin-bottom:10px;">Zone ${i+1}${surfTxt}</div>
+      <div style="font-size:13px; font-weight:600; color: var(--accent); margin-bottom:10px;">Zone ${i+1}${surfTxt}</div>
       
       <div class="form-row">
         <label>Nom de la zone</label>
@@ -9423,7 +9499,7 @@ function afficherBarreInstructionsDessin(parcelle) {
   bar.id = 'drawing-instructions';
   bar.style.cssText = 'position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:var(--surface); padding:14px 20px; border-radius:10px; box-shadow:0 4px 20px rgba(0,0,0,0.2); z-index:1500; max-width:90%; text-align:center;';
   bar.innerHTML = `
-    <div style="font-weight:600; color:var(--bordeaux); margin-bottom:6px;">✏️ Tracé : ${parcelle.nom}</div>
+    <div style="font-weight:600; color: var(--accent); margin-bottom:6px;">✏️ Tracé : ${parcelle.nom}</div>
     <div style="font-size:13px; color:var(--muted); margin-bottom:10px;">${messageTrace}</div>
     <button class="btn btn-primary" onclick="validerDessinParcelle()" style="margin-right:8px;">✓ Valider le tracé</button>
     <button class="btn btn-secondary" onclick="annulerDessinParcelle()">Annuler</button>
