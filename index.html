@@ -151,7 +151,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sa
 .auth-logo h1 { 
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 32px; 
-  color: var(--bordeaux); 
+  color: var(--accent); 
   font-weight: 700;
   letter-spacing: 4px;
   margin-bottom: 4px;
@@ -184,7 +184,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sa
 .auth-title {
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 24px;
-  color: var(--bordeaux);
+  color: var(--accent);
   font-weight: 700;
   margin-bottom: 4px;
   text-align: center;
@@ -207,7 +207,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sa
   letter-spacing: 0.4px; 
   margin-bottom: 5px; 
 }
-.auth-form-row input { 
+.auth-form-row input,
+.auth-form-row-grid input { 
   width: 100%; 
   padding: 11px 14px; 
   border: 1px solid var(--border); 
@@ -215,9 +216,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sa
   font-size: 15px; 
   font-family: inherit;
   background: var(--surface);
+  color: var(--ink);
   transition: border-color 0.15s, box-shadow 0.15s;
 }
-.auth-form-row input:focus { 
+.auth-form-row input:focus,
+.auth-form-row-grid input:focus { 
   outline: none; 
   border-color: var(--bordeaux);
   box-shadow: 0 0 0 3px rgba(107, 29, 46, 0.1);
@@ -350,6 +353,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sa
   line-height: 1.4;
 }
 .auth-success.show { display: block; }
+
+.auth-onboarding-notice {
+  background: var(--surface-2);
+  color: var(--ink);
+  border-left: 3px solid var(--accent);
+  padding: 12px 14px;
+  border-radius: 6px;
+  margin-bottom: 18px;
+  font-size: 13px;
+  line-height: 1.5;
+}
 
 /* État loading */
 .auth-btn .spinner {
@@ -1802,11 +1816,11 @@ body.wk-lock { overflow:hidden; }
       <div class="auth-form-row-grid">
         <div>
           <label style="display:block; font-size:12px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:0.4px; margin-bottom:5px;">Prénom</label>
-          <input type="text" id="jreg-prenom" autocomplete="given-name" required style="width:100%; padding:11px 14px; border:1px solid var(--border); border-radius:8px; font-size:15px; font-family:inherit; background:white;">
+          <input type="text" id="jreg-prenom" placeholder="Votre prénom" autocomplete="given-name" required>
         </div>
         <div>
           <label style="display:block; font-size:12px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:0.4px; margin-bottom:5px;">Nom</label>
-          <input type="text" id="jreg-nom" autocomplete="family-name" required style="width:100%; padding:11px 14px; border:1px solid var(--border); border-radius:8px; font-size:15px; font-family:inherit; background:white;">
+          <input type="text" id="jreg-nom" placeholder="Votre nom" autocomplete="family-name" required>
         </div>
       </div>
       
@@ -1845,11 +1859,11 @@ body.wk-lock { overflow:hidden; }
       <div class="auth-form-row-grid">
         <div>
           <label style="display:block; font-size:12px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:0.4px; margin-bottom:5px;">Prénom</label>
-          <input type="text" id="reg-prenom" placeholder="Loïc" autocomplete="given-name" required style="width:100%; padding:11px 14px; border:1px solid var(--border); border-radius:8px; font-size:15px; font-family:inherit; background:white;">
+          <input type="text" id="reg-prenom" placeholder="Votre prénom" autocomplete="given-name" required>
         </div>
         <div>
           <label style="display:block; font-size:12px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:0.4px; margin-bottom:5px;">Nom</label>
-          <input type="text" id="reg-nom" placeholder="Durieu" autocomplete="family-name" required style="width:100%; padding:11px 14px; border:1px solid var(--border); border-radius:8px; font-size:15px; font-family:inherit; background:white;">
+          <input type="text" id="reg-nom" placeholder="Votre nom" autocomplete="family-name" required>
         </div>
       </div>
       
@@ -1886,7 +1900,7 @@ body.wk-lock { overflow:hidden; }
       
       <div class="auth-error" id="onboarding-error"></div>
       
-      <div style="background:#f7f4ed; border-left:3px solid var(--bordeaux); padding:12px 14px; border-radius:6px; margin-bottom:18px; font-size:13px; color:var(--ink); line-height:1.5;">
+      <div class="auth-onboarding-notice" role="status">
         <strong>Compte créé avec succès !</strong><br>
         Donnez un nom à votre domaine pour commencer.
       </div>
