@@ -1,6 +1,6 @@
 // Service Worker — Ordo Vitis
 // Version du cache : incrémenter à chaque mise à jour majeure de l'app
-const CACHE_VERSION = 'ordo-vitis-organisation-v2-20261022-1';
+const CACHE_VERSION = 'ordo-vitis-materiel-20261028-1';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 
 // Fichiers essentiels à mettre en cache au démarrage
@@ -8,8 +8,9 @@ const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
-  "/assets/navigation.606eda079140.css",
-  "/assets/navigation.b0c31329f2ab.js",
+  "/assets/materiel.7b86d17b48bb.webp",
+  "/assets/navigation.3b8d815479b3.css",
+  "/assets/navigation.bdfb1f7aee0a.js",
   "/assets/espaces.972b33f112e2.png",
   "/assets/wiki-grimoire.06d78bee4bd2.webp",
   '/pwa-icons/icon-192.png',

@@ -4,7 +4,7 @@ Application web de gestion du domaine viticole, publiée sur https://ordovitis.f
 
 ## Organisation de l’interface
 
-L’accueil illustré ouvre les espaces Vue d’ensemble, Vignoble, Cave, Commercial, Stocks, Administration et Wiki. Les fonctionnalités accessibles dépendent des droits du membre. Cave et Commercial sont des emplacements « À venir ».
+L’accueil illustré ouvre les espaces Vue d’ensemble, Vignoble, Cave, Commercial, Stocks, Matériel, Administration et Wiki. Les fonctionnalités accessibles dépendent des droits du membre. Cave, Commercial et Matériel sont des emplacements « À venir ».
 
 La barre d’outils est en bas sur les fenêtres compactes et en haut sur les formats plus larges. La page Paramètres regroupe Mon compte, Sécurité, Apparence et Le domaine. Les changements d’adresse mail et de mot de passe y sont annoncés « À venir », sans nouveaux formulaires d’authentification.
 
@@ -22,4 +22,6 @@ Cette version réutilise la connexion Supabase et ses politiques RLS existantes,
 
 Une mise à jour de `main` déclenche la publication Cloudflare configurée pour ce dépôt. Avant chaque publication, vérifier les ressources, les parcours et les droits, mettre à jour les noms des ressources modifiées et la version du cache, puis contrôler le déploiement en ligne.
 
-Le commit précédent la nouvelle organisation est `24d8f3e61264a48294206167645e89bae77b71ef`. En cas de retour arrière, préparer un commit de rétablissement des fichiers de ce commit ; aucune restauration de base n’est requise par cette livraison, qui ne modifie pas les données.
+Le commit précédent l’ajout de Matériel et le déplacement du Wiki est `83109b7c6ebb560c275658c2c217918ca393ac17`. En cas de retour arrière, préparer un commit de rétablissement des fichiers de ce commit ; aucune restauration de base n’est requise par cette livraison, qui ne modifie pas les données.
+
+Le Wiki occupe une carte sur toute la largeur sous les six rubriques. Matériel utilise la variante olive avec pick-up double cabine moderne validée par Loïc ; les fiches et l’entretien ne sont pas encore implémentés.

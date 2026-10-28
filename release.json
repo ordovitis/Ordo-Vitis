@@ -1,16 +1,17 @@
 {
-  "version": "2026.10.22-organisation-v2",
-  "parent": "24d8f3e61264a48294206167645e89bae77b71ef",
-  "sourceSha256": "7ebcaec5a76a6623716ef5af1542e06bd4ced8b9c26bbe78b0a8e2cec10ffb6a",
+  "version": "2026.10.28-materiel-1",
+  "parent": "83109b7c6ebb560c275658c2c217918ca393ac17",
+  "sourceSha256": "acd677c2f477eb2c28a0d1e8041bfe7712b9f217d7e639451c05478da1590d22",
   "inlineScriptHashes": [
     "59c1bbc7e19c5d699001b34ca34288f2451a40e0afc0ed5b9d2c9bd841560ff6",
     "85baf64cd75ad3cfc4a15f8fa20a0764b82062b3414ad9709cab5c3343f41ab5"
   ],
   "assets": {
-    "css": "/assets/navigation.606eda079140.css",
-    "script": "/assets/navigation.b0c31329f2ab.js",
     "artwork": "/assets/espaces.972b33f112e2.png",
-    "wiki": "/assets/wiki-grimoire.06d78bee4bd2.webp"
+    "wiki": "/assets/wiki-grimoire.06d78bee4bd2.webp",
+    "material": "/assets/materiel.7b86d17b48bb.webp",
+    "css": "/assets/navigation.3b8d815479b3.css",
+    "script": "/assets/navigation.bdfb1f7aee0a.js"
   },
   "databaseMigration": false
 }
